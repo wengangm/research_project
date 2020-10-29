@@ -233,8 +233,75 @@ function translatePublicationDataToGraphAreaData(publicationData,targetAreas,tar
                         subAreas.push(subArea)
                     }
                 }
+            } 
+        }
+        //create node for topics
+        topics=publication['topics']
+        topic=topics[0]
+        if(targetTopics.indexOf(topic)>-1){
+            nodeIndex=nodeNames.indexOf(topic)
+        if(nodeIndex>-1){
+            node=nodes[nodeIndexs[nodeIndex]]
+            node['data'].push(publication)
+        }else{
+            nodeNames.push(topic)
+            nodeIndexs.push(nodes.length)
+            newNode=new Array()
+            newNode['name']=topic
+            newNode['data']=new Array()
+            newNode['data'].push(publication)
+            newNode['colorId']='topic';
+            newNode['layer']='topic'
+            nodes.push(newNode)
+        }
+        //create link for topics
+         source=nodeIndexs[nodeNames.indexOf(topic)]
+         for(var topIndex in topAreas){
+             var top=topAreas[topIndex]           
+             target=nodeIndexs[nodeNames.indexOf(top)]
+             linkAdded=false
+             for(var linkIndex in links){
+                 link=links[linkIndex]
+                 if(link['source']==source && link['target']==target ||
+                 link['source'==target && link['target']==source]){
+                     link['value']+=1
+                     linkAdded=true
+                     break
+                 }
+             }
+             if(!linkAdded){
+                 newLink=new Array()
+                 newLink['source']=source
+                 newLink['target']=target
+                 newLink['value']=1
+                 links.push(newLink)
+             }
+         }
+         for(var subIndex in subAreas){
+            var sub=subAreas[subIndex]           
+            target=nodeIndexs[nodeNames.indexOf(sub)]
+            linkAdded=false
+            for(var linkIndex in links){
+                link=links[linkIndex]
+                if(link['source']==source && link['target']==target ||
+                link['source'==target && link['target']==source]){
+                    link['value']+=1
+                    linkAdded=true
+                    break
+                }
+            }
+            if(!linkAdded){
+                newLink=new Array()
+                newLink['source']=source
+                newLink['target']=target
+                newLink['value']=1
+                links.push(newLink)
             }
         }
+        }
+
+
+        
     }
     results['node']=nodes
     results['link']=links

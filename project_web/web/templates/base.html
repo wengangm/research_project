@@ -205,7 +205,7 @@
                 d3.select("#areaGraphTitle").html("loading...")
             }else if(data.type=='translate_area'){
                 var result=data.result
-                drawGraph("areaGraphSvg","areaGraphTitle", result, "Areas", "tooltip",null,null);
+                drawGraph("areaGraphSvg","areaGraphTitle", result, "Areas Selected From Area List", "tooltip",null,null);
             }
         }
 
@@ -216,7 +216,7 @@
             }else if(data.type=='translate_author'){
                 var result=data.result
                 var selectedPublications=data.selectedPublications
-                drawGraph("authorGraphSvg","authorGraphTitle", result, "Authors", "tooltip",selectedPublications,authorIdList);
+                drawGraph("authorGraphSvg","authorGraphTitle", result, "Authors Selected From Author List", "tooltip",selectedPublications,authorIdList);
             }
         }
 
@@ -228,11 +228,17 @@
             d3.selectAll("#barSvg >*").remove()
             d3.selectAll("#areaGraphSvg >*").remove()
             d3.selectAll("#authorGraphSvg >*").remove()
+            d3.select('#authorDetail').style("display",'none')
+            d3.select("#areaGraphTitle").html("Areas Selected From Area List")
+            d3.select("#authorGraphTitle").html("Authors Selected From Author List")
             var selectedPublications=selectData(publicationsData,currentYear,authorChecked,areaChecked)
             
             areaWorker.terminate()
             authorWorker.terminate()
 
+            if(selectedPublications.length<=0){
+                return
+            }
             areaWorker=new Worker('./static/js/dataHandler.js')
             authorWorker=new Worker('./static/js/dataHandler.js')
 
@@ -255,9 +261,7 @@
             
             // var dataForAreaGraph=translatePublicationDataToGraphAreaData(selectedPublications,areaChecked,topicChecked)
             // var dataForAuthorGraph=translatePublicationDataToGraphAuthorData(selectedPublications,authorIdList,authorChecked)  
-            if(selectedPublications.length<=0){
-                return
-            }
+            
             if(currentYear=='All'){
                 var dataForBar=translatePublicationDataToBarData(selectedPublications)
 
