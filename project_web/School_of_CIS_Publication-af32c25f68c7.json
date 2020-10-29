@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "school-of-cis-publication",
+  "private_key_id": "af32c25f68c71e0a3e2e111c5dbbd0d354cf234a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDOVaR9+qq/Zaca\nQKOgVuVh15c5p4C14w64RMwzP6Sy4Mfx3dFYuaOyWh+a3igy4g/KPU/FiR5N6kOc\nNRi54HBypFfHD0Egh3BEv55THtZuAHcF1u5qmwAJ/MIEWfDgTLUmJ6wMLfPmDOx1\nCFEOsmxRGHJv1E0hFqDcYqq1mqzYVyYdt7q8lquViQCqZG2ITvji4aXtCF5aWs65\ndU4S9CvH1qQGfswMk/Uk36a/8mavaqxNad7mS0eL3lOR7YeTf5reAfW7pqNHi/L+\nBsTTNEEbrwGqE295pG5p85relR2urFNLS4MrUzOZW8RTShevU/NUisobKykt3bKe\nGyZK645NAgMBAAECggEAGCV6ngmXMNXfE9nrrChvKJ+XwXYCQIblYpgeg4LXrd1T\nWNE6HhV/fDBC0ZddAfNloKfDLZ1J0BlxtxaZoasLzcbAxPlaiEmBUHJSP2z08COa\nyjKobQ5dl02ekO7Lmxwu+NucrUI1cD8j7uA9yCgGOAlR3xdrvUsOISxkyOLkhl6a\nqxLLbgW/F++LAnBOD46Jc1U9G2F3YhuxRualJIVbro4GudXCEB9/PBhiob4TCnAu\nM6lUvNMYSvnUqnsFOxRZfXrHm3i+InshLcwbYzsi4uhtNHp/e4R/Q8S/vpaKi/c5\nMavyUI2owcFIOsVukEGL6EKnGb4SEC4qMXavKybUIQKBgQDxHOnl6ruBuX5orb6b\nAMswlnz13Rz4mgcwdEqPu/DjDl+Az713uCQf/2PPwGgOHfbx7FfMrXe8GJT6iO9/\n9YwYR0zMlPLEi+/URNzaK3GGPMmEBQFy9XnKEgreKRhc+W2RyhohcGpKviEKoWjR\nGktDFmChErG7C+tdqspMAi1ovQKBgQDbEwN0XFKoBqUj4PdRMMJzgORhiL+6nWSc\nqjUsSOB2ij5vGwjUoDjHW5qOvsL7CjW0iwsl/msyugdz9ikMVjeVjbyElaA9WtGW\neQh/g6TRiJWti/qsJ+hkWNfhXU6m452/QU0FHsOMVS2boqMYoTat4R5qYD0WZ4Ay\nWU8yLSv80QKBgQC7GOurfN2pyW38/q3Ei/YgKvamtsDvbF6dy++732QKXTHgu9NT\nXjGyHrSuFqjoI3pnujVbX1RlQlIAo1ft3HWstU80BXTo7YnaFuGl7kY2m17oMhYw\nxamPEzcZs5vzMZ5DniduwVPJ0gXDwQKcGCJE2c170AzYj2RBl/FIz/u6pQKBgAMz\nzfMffl3SawuROExJiC4kDjKWyyaxMk1P96MEFbPl5W++V2y0QuA3KJU5mKQOzCYt\neiY+B9cf/Qfm60aw4/MdtUnC3irHbxTiBAvJItmlQ3rb9vgZRT5iRhWXRZUO8rle\n/P88KeOdQyNpRzUO9juodMddTMdNEASsZYn4OxJhAoGBAJiPShJIDW6FX2+wDUR1\nO0A8X8LsqOZo1pPZpATFONXeIg3VhyqN9PdMTwDrC3l70SXCWxqHv6kJRyjZtd0x\nx+KINOLaBpi1Jg34HkLLLiShplThVun1izikYqjl8tcVhJpVjxx/Nm5PTiSJGy1T\nkxHmwTmwtete1xH/4KBpCPna\n-----END PRIVATE KEY-----\n",
+  "client_email": "cis-publication-service@school-of-cis-publication.iam.gserviceaccount.com",
+  "client_id": "106940358764228409231",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cis-publication-service%40school-of-cis-publication.iam.gserviceaccount.com"
+}

@@ -1,0 +1,345 @@
+:root{
+    --margin-header:30px;
+    --shadow:3px 3px 3px rgba(0, 0, 0, 0.3);
+    --chartBackgroundColor:rgb(255, 255, 255);
+}
+
+html,body{
+    background: #dce4ec;
+    height: 100%;
+}
+
+.head{
+    background-image:linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ),url('../image/background.jpg');
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+h3{
+    color:white;
+    margin:0;
+    font-family: fantasy;
+}
+
+
+.nav{
+    margin-top: 80px;
+}
+
+.nav a{
+    color:#ffffff;
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+.nav a:hover{
+    background: white;
+    color:var(--gray-dark);
+}
+
+
+.search-holder{
+    margin-top:var(--margin-header);
+}
+
+.search-holder form{
+    box-shadow: var(--shadow);
+}
+
+.search-holder select{
+    border-radius: 0;
+}
+
+.search-holder input{
+    border-radius: 0;
+}
+
+.search-holder button{
+    border-radius: 0;
+}
+
+
+.yearHolder{
+    margin-top: 30px;
+}
+
+/**
+===========================================
+chart
+===========================================
+*/
+
+
+#tooltip{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:15px;
+    color:white;
+    width:80;
+    height:auto;
+    position:absolute; 
+    text-align:center;
+    background-color:rgb(131, 123, 123);
+    padding: 10px;
+    border-radius: 4px;
+    opacity: 0;
+}
+
+#authorDetail{
+    widows: 300px;
+    height:auto;
+    position: absolute;
+}
+
+.chartContainer{
+    margin-top:30px;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    background: white;
+    box-shadow:var(--shadow);
+}
+
+svg{
+    background-color: var(--chartBackgroundColor);
+}
+
+.chartTitle{
+    background-color:var(--chartBackgroundColor);
+    padding-top: 10px;
+    padding-bottom: 20px;
+    font-family:Georgia, serif;
+    font-size:25px;
+    color:black;
+    text-align:center;
+}
+
+/**
+====================================
+bar chart
+====================================
+**/
+.barChart{
+    --rectPadding:30px; /*the padding of two bar*/
+    --colorTheme:d3.interpolateRdBu; /*the color from d3*/
+    --isZoom:true;/*if the chart could be zoomed*/
+}
+
+.barChart .rect{
+    stroke:white;
+}
+.barChart .rect:hover{
+    fill-opacity: 0.5;
+}
+
+.barChart .svgMainView{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: 50px;
+    margin-right: 80px;
+}
+
+.axis-x text{
+    font-size: 10px;
+}
+
+.axis-y text{
+    font-size: 10px;
+}
+
+.barChart .axis-label{
+    font-size: 24px;
+}
+
+
+.barLegend{
+    border-top: solid 1px black;
+    --legendRectWidth:30px; /*the width of legend rect*/
+    --legendRectHeight:20px; /*the height of legend rect*/
+    --legendRectTextPadding:3px;/*the padding between legend rect and text*/
+    --legendTextWidth:80px;/*the width of legend text*/
+    --legendPadding:8px;/*the padding of two legends*/
+}
+
+.barLegend rect{
+    stroke: black;
+}
+
+.barLegend text{
+    font-size: 15px;
+}
+
+
+/**
+====================================
+graph
+====================================
+**/
+.graph{
+    --colorTheme:d3.interpolateSpectral; /*the color from d3*/
+    --isZoom:true;/*if the chart could be zoomed*/
+    --circleRadiusMax:60px;/*the max radius of a circle*/
+    --circleRadiusMin:10px;/*the min radius of a circle*/
+    --linkWidthMin:1px;/*the max width of a link*/
+    --linkWidthMax:8px;/*the min width of a link*/
+    --publicationCircle:rgb(76, 88, 177);/*the color of the circle which represent publication*/
+    --areaCircle:rgb(188, 110, 233);/*the color of the circle which represent an area*/
+    --authorCircle:rgb(143, 204, 233);/*the color of the circle which represent an author*/
+}
+
+.graph .link line{
+    stroke: rgb(88, 88, 88);
+}
+
+.graph .node circle{
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.graph .node .isUni circle{
+    fill: #4ea3b1;
+}
+.graph .node .notUni circle{
+    fill: #d3ed9e;
+}
+.graph .node text{
+    font-family: sans-serif;
+    font-size: 15px;
+    text-anchor: middle;
+}
+
+#authorDetail{
+    border:  #708798 1px solid;
+    display: none;
+}
+
+
+/**
+=============================================
+details
+*/
+.listContainer{
+    background: rgb(228, 228, 227);
+    box-shadow:var(--shadow);
+}
+
+.listNav a{
+    color:rgb(176, 210, 241);
+    font-size: 18px;
+}
+
+.listNav span{
+    color:white;
+    font-size: 25px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before{
+    content:"/";
+    color: white;
+}
+
+.listTool{
+    margin-bottom: 20px;
+}
+
+.listTool p{
+    height: 10px;
+}
+
+.dropdown button{
+    font-size: 15px;
+    color: black;
+}
+
+.dropdown-menu a:hover{
+    background-color: rgb(175, 175, 175);
+}
+
+#btnPrevious,#btnNext{
+    width: 11px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;
+    outline: none;
+    background-color: rgb(228, 228, 227);
+}
+
+#btnPrevious{
+    margin-right: 20px;
+}
+
+#btnPrevious:hover,#btnNext:hover{
+    opacity: 0.5;
+}
+
+#btnPrevious:disabled,#btnNext:disabled{
+    opacity: 0.5;
+}
+
+
+#btnPrevious{
+    background-image:url('../image/leftArrow.png');
+    background-repeat: no-repeat;
+}
+
+#btnNext{
+    background-image: url("../image/rightArrow.png");
+    background-repeat: no-repeat;
+}
+
+
+#listContent{
+    padding-right:0;
+}
+
+#listContent a{
+    background:white;
+    border-radius: 0;
+}
+
+#listContent a:hover{
+    background: rgb(228, 228, 227);
+}
+
+
+.list-group button{
+    border-radius: 0;
+    text-align: left;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.input-group .input-group-text{
+    border-radius: 0;
+}
+
+.checkbox_text{
+    border-radius: 0;
+    text-overflow:ellipsis;
+    margin:0;
+}
+
+#listContent_Author li{
+    padding: 0;
+}
+
+#listContent_Area li{
+    padding:0;
+}
+#listContent_Topic li{
+    padding:0;
+}
+
+.listTitle{
+
+}
+
+.listTitle p{
+    text-align: center;
+    color: white;
+    font-size: 25px;
+    margin:0;
+}
+
+.sortHolder{
+    height: 50px;
+}

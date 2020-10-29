@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/homePage.css')}}">
+    {% block css %}
+    
+    {% endblock css %}
+    <title>homePage</title>
+</head>
+
+<body>
+    <div class="page">
+        <div class="head container-fluid">
+            <div class="row">
+                <h3 class="col-12 text-center">CIS Publications</h3>
+            </div>
+        </div>
+        
+        {% block page %}
+        <div class="container-fluid">  
+            <div class="row">
+                <div class="container-fluid col-3">
+                    <div class="yearHolder row d-flex">
+                        <label class="form-control col-4">Year</label>
+                        <select class="form-control col" id="yearSelecter">
+                            <option value='All'>All</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="listContainer container-fluid">
+                            <div class="listNav row">
+                                <div id="listTitle_Author" class="listTitle bg-secondary align-items-center col-12" style="border-radius:0">
+                                    <p class="text-center">Authors</p>
+                                </div>
+                            </div>
+                            <div class="sortHolder row">
+                                <label class="form-control col-4">Sort By</label>
+                                <select class="form-control col" id="sortSelecter" onChange="onSortChange()">
+                                    <option>Name</option>
+                                    <option>Document Count</option>
+                                    <option>Citation Count</option>
+                                    <option>Coauthors Count</option>
+                                </select>
+                            </div>
+                                        
+                            <div class="row">
+                                <ul id="listContent_Author" class="list-group col" style="height: 500px;overflow-y:auto;padding:0">
+                                        
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="listContainer container-fluid">
+                            <div class="listNav row">
+                                <div id="listTitle_Area" class="listTitle bg-secondary align-items-center col-12" style="border-radius:0">
+                                    <p class="text-center">Areas</p>
+                                </div>
+                            </div>
+                                        
+                            <div class="row">
+                                <ul id="listContent_Area" class="list-group col" style="height: 550px;overflow-y:auto;padding:0">
+                                        
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="listContainer container-fluid">
+                            <div class="listNav row">
+                                <div id="listTitle_Topic" class="listTitle bg-secondary align-items-center col-12" style="border-radius:0">
+                                    <p class="text-center">Topics</p>
+                                </div>
+                            </div>
+                                        
+                            <div class="row">
+                                <ul id="listContent_Topic" class="list-group col" style="height: 550px;overflow-y:auto;padding:0">
+                                        
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column col">
+                    <div id="containerBar" class="chartContainer d-flex flex-column flex-fill">
+                        <div id="barTitle" class="chartTitle">
+                        </div>
+                        <div class="chartView flex-grow-1">
+                            <svg id="barSvg" class="barChart" style="height:400px;width:100%">
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="chartContainer d-flex flex-column flex-fill">
+                        <div id="areaGraphTitle" class="chartTitle">
+                        </div>
+
+                        <div class="chartView flex-grow-1">
+                            <svg id="areaGraphSvg" class="graph" style="height:675px;width:100%">
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="chartContainer d-flex flex-column flex-fill">
+                        <div id="authorGraphTitle" class="chartTitle">
+                        </div>
+
+                        <div class="chartView flex-grow-1">
+                            <svg id="authorGraphSvg" class="graph" style="height:675px;width:100%">
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="authorDetail">
+                    <div id="authorDetailTitle" class="chartTitle">
+                    </div>
+                    <svg id="authorDetailSvg" class="graph" style="height:300px;width:300px">
+                    </svg>
+                </div>
+            </div>
+        {% endblock page %}
+        <div id="tooltip">
+        </div>
+    </div>
+    </div>
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/d3.v5.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/myUtil.js')}}" ></script>
+    <script src="{{url_for('static',filename='js/dataHandler.js')}}" ></script>
+    {% block script %}
+    <script>
+        const publicationsData={{publicationsData| tojson}};    //Get data from server
+        const years={{years| tojson}};
+        const authorList={{authorList| tojson}};
+        authorIdList=new Array();
+        currentPublications=publicationsData;
+        currentAuthorList=authorList;
+        for(var i in currentAuthorList){
+            authorIdList.push(authorList[i]['auid'])
+            currentAuthorList[i]['isChecked']=true      //Set initial check boxes in author list are checked
+        }
+        currentAreaList=getAreas(publicationsData);
+        authorChecked=new Array();
+        areaChecked=new Array();
+        authorSortBy=SORT_AUTHOR_NAME   //Define the sortord of author list
+
+        currentTopicList=getTopics(publicationsData)
+        for(var i in currentTopicList){
+            currentTopicList[i]['isChecked']=true       //Set initial check boxes in topic list are checked
+        }
+        topicChecked=new Array();
+        currentYear='All'   //Set initial year is 'All'
+
+        yearSelecter=d3.select("#yearSelecter")     //Add year selecter on page
+        .attr("onChange","onYearChange()")          //The option data are from server
+        yearSelecter.selectAll("option")
+            .data(years)
+            .enter()
+            .append("option")
+            .attr("value",d=>d)
+            .html(d=>d)
+
+        currentAuthorList.sort(getSortFunction(authorSortBy))   //Sort author list 
+        showAuthorList(currentAuthorList,"listContent_Author",true,authorSortBy)
+        showAreaList(currentAreaList,"listContent_Area",true)
+        showTopicList(currentTopicList,"listContent_Topic",true)
+
+        var areaWorker=new Worker('./static/js/dataHandler.js')
+        var authorWorker=new Worker('./static/js/dataHandler.js')
+
+        // areaWorker.onmessage=function(event){
+        //     var data=event.data
+        //     if(data.type=='notification'){
+        //         d3.select("#areaGraphTitle").html("loading...")
+        //     }else if(data.type=='translate_area'){
+        //         var result=data.result
+        //         drawGraph("areaGraphSvg","areaGraphTitle", result, "Areas", "tooltip",null);
+        //     }
+        // }
+        // authorWorker.onmessage=function(event){
+        //     var data=event.data
+        //     if(data.type=='notification'){
+        //         d3.select("#authorGraphTitle").html("loading...")
+        //     }else if(data.type=='translate_author'){
+        //         var result=data.result
+        //         var selectedPublications=data.selectedPublications
+        //         drawGraph("authorGraphSvg","authorGraphTitle", result, "Authors", "tooltip",selectedPublications);
+        //     }
+        // }
+
+        changeCurrentData(false)
+
+
+        function worker_area(event){
+            var data=event.data
+            if(data.type=='notification'){
+                d3.select("#areaGraphTitle").html("loading...")
+            }else if(data.type=='translate_area'){
+                var result=data.result
+                drawGraph("areaGraphSvg","areaGraphTitle", result, "Areas", "tooltip",null,null);
+            }
+        }
+
+        function worker_author(event){
+            var data=event.data
+            if(data.type=='notification'){
+                d3.select("#authorGraphTitle").html("loading...")
+            }else if(data.type=='translate_author'){
+                var result=data.result
+                var selectedPublications=data.selectedPublications
+                drawGraph("authorGraphSvg","authorGraphTitle", result, "Authors", "tooltip",selectedPublications,authorIdList);
+            }
+        }
+
+        function showChart(){
+            /**
+            Translate the publications data to the structure for charts,
+            then draw the charts.
+            */
+            d3.selectAll("#barSvg >*").remove()
+            d3.selectAll("#areaGraphSvg >*").remove()
+            d3.selectAll("#authorGraphSvg >*").remove()
+            var selectedPublications=selectData(publicationsData,currentYear,authorChecked,areaChecked)
+            
+            areaWorker.terminate()
+            authorWorker.terminate()
+
+            areaWorker=new Worker('./static/js/dataHandler.js')
+            authorWorker=new Worker('./static/js/dataHandler.js')
+
+            areaWorker.onmessage=worker_area
+            authorWorker.onmessage=worker_author
+
+            areaWorker.postMessage({
+                type:'translate_area',
+                selectedPublications:selectedPublications,
+                areaChecked:areaChecked,
+                topicChecked:topicChecked
+            })
+
+            authorWorker.postMessage({
+                type:'translate_author',
+                selectedPublications:selectedPublications,
+                authorIdList:authorIdList,
+                authorChecked:authorChecked
+            })
+            
+            // var dataForAreaGraph=translatePublicationDataToGraphAreaData(selectedPublications,areaChecked,topicChecked)
+            // var dataForAuthorGraph=translatePublicationDataToGraphAuthorData(selectedPublications,authorIdList,authorChecked)  
+            if(selectedPublications.length<=0){
+                return
+            }
+            if(currentYear=='All'){
+                var dataForBar=translatePublicationDataToBarData(selectedPublications)
+
+                d3.select("#barTitle").attr("class","chartTitle")
+                d3.select("#barSvg").attr("class","barChart")
+                d3.select("#containerBar").attr("class","chartContainer d-flex flex-column flex-fill")
+                var areaSize=areaChecked.length+topicChecked.length
+                drawBarChart2("barSvg","barTitle",dataForBar,"Publications  VS  Year","tooltip",areaSize);
+            }else{
+                d3.select("#barTitle").attr("class","d-none")
+                d3.select("#barSvg").attr("class","d-none")
+                d3.select("#containerBar").attr("class","d-none")
+            }
+            
+            // drawGraph("areaGraphSvg","areaGraphTitle", dataForAreaGraph, "Areas", "tooltip");
+                    
+            // drawGraph("authorGraphSvg","authorGraphTitle", dataForAuthorGraph, "Authors", "tooltip");
+        }
+               
+        function onYearChange(){
+            changeCurrentData(true)
+        }
+        
+        function onclickAuthorAll(){
+            authorAllBox=document.getElementById("checkbox_author_all")
+            checkboxesAuthor=document.getElementsByClassName("checkbox_author")
+            if(authorAllBox.checked){
+                for(var i=0;i<checkboxesAuthor.length;i++){
+                    checkboxesAuthor[i].checked=true
+                    currentAuthorList[i]['isChecked']=true
+                }
+            }else{
+                for(var i=0;i<checkboxesAuthor.length;i++){
+                    checkboxesAuthor[i].checked=false
+                    currentAuthorList[i]['isChecked']=false
+                }
+            }
+            changeCurrentData(false)
+        }
+
+        function onclickTopicAll(){
+            var topicAllBox=document.getElementById("checkbox_topic_all")
+            var checkboxesTopic=document.getElementsByClassName("checkbox_topic")
+            if(topicAllBox.checked){
+                for(var i=0;i<checkboxesTopic.length;i++){
+                    checkboxesTopic[i].checked=true
+                    currentTopicList[i]['isChecked']=true
+                }
+            }else{
+                for(var i=0;i<checkboxesTopic.length;i++){
+                    checkboxesTopic[i].checked=false
+                    currentTopicList[i]['isChecked']=false
+                }
+            }
+            changeCurrentData(false)
+        }
+        function onclickTopic(topicId){
+            var topicAllBox=document.getElementById("checkbox_topic_all")
+            topicAllBox.checked=false
+            for(var i in currentTopicList){
+                if(currentTopicList[i].name==topicId){
+                    var boxs=document.getElementsByName(topicId)
+                    var isChecked=boxs[0].checked
+                    currentTopicList[i].isChecked=isChecked
+                    break
+                }
+            }
+            changeCurrentData(false)
+        }
+
+        function onSortChange(){
+            var sortSelecter=document.getElementById("sortSelecter")
+            var sortBy=sortSelecter.selectedIndex
+            currentAuthorList.sort(getSortFunction(sortBy))
+            authorSortBy=sortBy
+            showAuthorList(currentAuthorList,"listContent_Author",false,authorSortBy)
+        }
+
+        function onclickAreaAll(){
+            var areaAllBox=document.getElementById("checkbox_area_all")
+            checkboxesArea=document.getElementsByClassName("checkbox_area")
+            if(areaAllBox.checked){
+                areaCheckAll=true
+                for(var i=0;i<checkboxesArea.length;i++){
+                    checkboxesArea[i].checked=true
+                }
+            }else{
+                areaCheckAll=false
+                for(var i=0;i<checkboxesArea.length;i++){
+                    checkboxesArea[i].checked=false
+                }
+            }
+            changeCurrentData(false)
+        }
+            
+        function onclickAuthor(id){
+            authorAllBox=document.getElementById("checkbox_author_all")
+            authorAllBox.checked=false
+            for(var i in currentAuthorList){
+                if(currentAuthorList[i].auid==id){
+                    var boxs=document.getElementsByName(id)
+                    var isChecked=boxs[0].checked
+                    currentAuthorList[i].isChecked=isChecked
+                    break
+                }
+            }
+            changeCurrentData(false)
+        }
+            
+        function onclickTopArea(topAreaId){
+            var areaAllBox=document.getElementById("checkbox_area_all")
+            areaAllBox.checked=false
+            changeCurrentData(false)
+        }
+        function onclickSubAreaAll(topAreaId){
+            var areaAllBox=document.getElementById("checkbox_area_all")
+            areaAllBox.checked=false
+            var box=document.getElementById(topAreaId+"-sub").getElementsByClassName("subBoxAll")[0]
+            var subBoxes=document.getElementById(topAreaId+"-sub").getElementsByClassName("checkbox_area")
+            if(box.checked){
+                for(var i=0;i<subBoxes.length;i++){
+                    subBoxes[i].checked=true
+                }
+            }else{
+                for(var i=0;i<subBoxes.length;i++){
+                     subBoxes[i].checked=false
+                }
+            }
+            changeCurrentData(false)
+        }
+        function onclickArea(topAreaId){
+            var areaAllBox=document.getElementById("checkbox_area_all")
+            areaAllBox.checked=false
+            if(topAreaId!='None'){
+                var subAllBox=document.getElementById(topAreaId+"-sub").getElementsByClassName("subBoxAll")[0]
+                subAllBox.checked=false
+            }
+            changeCurrentData(false)
+        }
+
+        function changeCurrentData(isYearChange){
+            /**
+            Change the values of variables and show different charts
+            */
+            var selecter=document.getElementById("yearSelecter")
+            var selectedIndex=selecter.selectedIndex
+            currentYear=selecter.options[selectedIndex].value
+
+            if(!isYearChange){
+                var checkboxesAuthor=document.getElementsByClassName("checkbox_author")
+                var checkboxesArea=document.getElementsByClassName("checkbox_area")
+                var checkboxesTopic=document.getElementsByClassName("checkbox_topic")
+                authorChecked=new Array()
+                areaChecked=new Array()
+                topicChecked=new Array();
+                for(var i in checkboxesAuthor){
+                    if(checkboxesAuthor[i].checked){
+                        authorChecked.push(checkboxesAuthor[i].name)
+                    }
+                }
+                for(var i in checkboxesArea){
+                    if(checkboxesArea[i].checked){
+                        areaChecked.push(checkboxesArea[i].name)
+                    }
+                }
+                for(var i in checkboxesTopic){
+                    if(checkboxesTopic[i].checked){
+                        topicChecked.push(checkboxesTopic[i].name)
+                    }
+                }
+            }else{
+                if(currentYear=='All'){
+                    currentPublications=publicationsData
+                }else{
+                    currentPublications=selectDataByYear(publicationsData,currentYear)
+                }
+                currentAuthorList=getAuthorList(currentPublications,authorList);
+                for(var i in currentAuthorList){
+                    currentAuthorList[i]['isChecked']=true
+                }
+                currentAreaList=getAreas(currentPublications);
+                currentTopicList=getTopics(currentPublications);
+                for(var i in currentTopicList){
+                    currentTopicList[i]['isChecked']=true
+                }
+                var sortFunction=getSortFunction(authorSortBy)
+                currentAuthorList.sort(sortFunction)
+                showAuthorList(currentAuthorList,"listContent_Author",true,authorSortBy)
+                showAreaList(currentAreaList,"listContent_Area",true)
+                showTopicList(currentTopicList,"listContent_Topic",true)
+                authorChecked=new Array()
+                areaChecked=new Array()
+                topicChecked=new Array()
+                var checkboxesAuthor=document.getElementsByClassName("checkbox_author")
+                var checkboxesArea=document.getElementsByClassName("checkbox_area")
+                var checkboxesTopic=document.getElementsByClassName("checkbox_topic")
+                for(var i in checkboxesAuthor){
+                    if(checkboxesAuthor[i].checked){
+                        authorChecked.push(checkboxesAuthor[i].name)
+                    }
+                }
+                for(var i in checkboxesArea){
+                    if(checkboxesArea[i].checked){
+                        areaChecked.push(checkboxesArea[i].name)
+                    }
+                }
+                for(var i in checkboxesTopic){
+                    if(checkboxesTopic[i].checked){
+                        topicChecked.push(checkboxesTopic[i].name)
+                    }
+                }
+            }
+            showChart()
+        }
+    </script>
+     {% endblock script %}
+</body>
+
+</html>
