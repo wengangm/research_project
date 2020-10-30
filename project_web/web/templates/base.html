@@ -268,7 +268,7 @@
                 d3.select("#barTitle").attr("class","chartTitle")
                 d3.select("#barSvg").attr("class","barChart")
                 d3.select("#containerBar").attr("class","chartContainer d-flex flex-column flex-fill")
-                var areaSize=areaChecked.length+topicChecked.length
+                var areaSize=areaChecked.length
                 drawBarChart2("barSvg","barTitle",dataForBar,"Publications  VS  Year","tooltip",areaSize);
             }else{
                 d3.select("#barTitle").attr("class","d-none")

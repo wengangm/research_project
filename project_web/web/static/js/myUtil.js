@@ -1287,7 +1287,9 @@ function drawBarChart2(svgBarId, divTitle, data, title, divTip,areasSize) {
         .on("mouseover", function (d, i) {
             //show tip
             var authorString=''
+            var titleString=''
             if(areasSize==1){
+                titleString="<br/><br/>First Publication:<br/>'"+title+"'"
                 authorString+="<br/><br/>First Authors:<br/>"
                 var firstYear=0;
             var firstMonth;
@@ -1317,7 +1319,7 @@ function drawBarChart2(svgBarId, divTitle, data, title, divTip,areasSize) {
                 authorString+=author['givenName']+' '+author['familyName']+';<br/>'
             }
             }
-            titleString="<br/><br/>First Publication:<br/>'"+title+"'"
+            
             
             tooltip.html(labelX + ":" + x[i] + "<br/>" + labelY + ":" + d.length +titleString+authorString)
                 .style("left", (d3.event.pageX) + "px")
